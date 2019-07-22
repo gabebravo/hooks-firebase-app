@@ -29,31 +29,33 @@ const useStyles = makeStyles(theme => ({
     }
   },
   paper: {
-    marginTop: theme.spacing.unit * 8,
+    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(3)}px`
   },
   avatar: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main
   },
   form: {
     width: '100%', // Fix IE11 issue.
-    marginTop: theme.spacing.unit
+    marginTop: theme.spacing(1)
   },
   submit: {
     marginTop: theme.spacing(3)
   }
 }));
 
+const INIT_VALUES = {
+  email: '',
+  password: ''
+};
+
 function SignIn() {
   const classes = useStyles();
-  const [fieldsObj, fieldSetter] = React.useState({
-    email: '',
-    password: ''
-  });
+  const [fieldsObj, fieldSetter] = React.useState(INIT_VALUES);
   const { email, password } = fieldsObj;
 
   function fieldHandler(evt) {
@@ -62,7 +64,8 @@ function SignIn() {
   }
 
   function signIn() {
-    console.log('login clicked');
+    console.log('login clicked:', fieldsObj);
+    fieldSetter(INIT_VALUES);
   }
 
   return (
