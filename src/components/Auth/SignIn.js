@@ -51,10 +51,10 @@ const useStyles = makeStyles(theme => ({
 function SignIn() {
   const classes = useStyles();
   const [fieldsObj, fieldSetter] = React.useState({
-    username: '',
+    email: '',
     password: ''
   });
-  const { username, password } = fieldsObj;
+  const { email, password } = fieldsObj;
 
   function fieldHandler(evt) {
     const { name, value } = evt.target;
@@ -76,11 +76,12 @@ function SignIn() {
           <Typography>Sign In</Typography>
           <form className={classes.form}>
             <FormControl margin="normal" fullWidth required>
-              <InputLabel htmlFor="username">Username</InputLabel>
+              <InputLabel htmlFor="email">Email</InputLabel>
               <Input
-                value={username}
-                name="username"
+                value={email}
+                name="email"
                 autoComplete="off"
+                type="email"
                 autoFocus
                 onChange={fieldHandler}
               />

@@ -54,26 +54,15 @@ const useStyles = makeStyles(theme => ({
 export default function SignUp() {
   const classes = useStyles();
   const [fieldsObj, fieldSetter] = React.useState({
-    username: '',
+    name: '',
     email: '',
     password: ''
   });
-  const { username, email, password, phone_number } = fieldsObj;
-
-  function phoneRenderFormat(number) {
-    const phoneRegex = /(\d{0,3})(\d{0,3})(\d{0,4})/;
-    let ph = number.replace(/\D/g, '').match(phoneRegex);
-    ph = !ph[2]
-      ? ph[1]
-      : '(' + ph[1] + ') ' + ph[2] + (ph[3] ? '-' + ph[3] : '');
-    return ph;
-  }
+  const { name, email, password } = fieldsObj;
 
   function fieldHandler(evt) {
     const { name, value } = evt.target;
-    const finalValue =
-      name === 'phone_number' ? phoneRenderFormat(value) : value;
-    fieldSetter({ ...fieldsObj, [name]: finalValue });
+    fieldSetter({ ...fieldsObj, [name]: value });
   }
 
   function signUp() {
@@ -90,10 +79,10 @@ export default function SignUp() {
           <Typography>Sign Up</Typography>
           <form className={classes.form}>
             <FormControl margin="normal" fullWidth required>
-              <InputLabel htmlFor="username">Username</InputLabel>
+              <InputLabel htmlFor="username">Name</InputLabel>
               <Input
-                value={username}
-                name="username"
+                value={name}
+                name="name"
                 autoComplete="off"
                 autoFocus
                 onChange={fieldHandler}
@@ -116,15 +105,6 @@ export default function SignUp() {
                 name="password"
                 autoComplete="off"
                 type="password"
-                onChange={fieldHandler}
-              />
-            </FormControl>
-            <FormControl margin="normal" fullWidth required>
-              <InputLabel htmlFor="phone_number">Phone Number</InputLabel>
-              <Input
-                value={phone_number}
-                name="phone_number"
-                autoComplete="off"
                 onChange={fieldHandler}
               />
             </FormControl>
