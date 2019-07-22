@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
 function ForgotPassword() {
-  return <div>ForgotPassword</div>;
+  return <div style={{ fontSize: '40rem' }}>ForgotPassword</div>;
 }
 
 export default ForgotPassword;

@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
 function LinkList(props) {
-  return <div>LinkList</div>;
+  return <div style={{ fontSize: '40rem' }}>LinkList</div>;
 }
 
 export default LinkList;

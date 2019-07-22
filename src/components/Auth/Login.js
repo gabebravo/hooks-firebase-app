@@ -1,7 +1,8 @@
-import React from "react";
+import React from 'react';
 
 function Login(props) {
-  return <div>Login</div>;
+  console.log('I rendered');
+  return <div style={{ fontSize: '40rem' }}>Login</div>;
 }
 
 export default Login;

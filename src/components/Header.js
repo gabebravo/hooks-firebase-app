@@ -93,7 +93,7 @@ const links = {
   New: '/',
   Top: '/top',
   Search: '/search',
-  Submit: '/submit'
+  Submit: '/create'
 };
 
 function Header({ headerText }) {
@@ -111,8 +111,8 @@ function Header({ headerText }) {
 
   function returnNavLink(text) {
     return (
-      <NavLink className={classes.menuLinkStyles} to={links[text]}>
-        <ListItem button key={text}>
+      <NavLink key={text} className={classes.menuLinkStyles} to={links[text]}>
+        <ListItem button>
           <ListItemIcon>
             <LinkIcon />
           </ListItemIcon>
@@ -177,7 +177,7 @@ function Header({ headerText }) {
         </List>
         <Divider />
       </Drawer>
-      <main
+      {/* <main
         className={clsx(classes.content, {
           [classes.contentShift]: open
         })}
@@ -212,7 +212,7 @@ function Header({ headerText }) {
           eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
           posuere sollicitudin aliquam ultrices sagittis orci a.
         </Typography>
-      </main>
+      </main> */}
     </div>
   );
 }
