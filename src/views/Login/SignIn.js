@@ -5,9 +5,7 @@ import {
   Avatar,
   Button,
   CssBaseline,
-  FormControl,
-  Input,
-  InputLabel,
+  TextField,
   Paper,
   Typography
 } from '@material-ui/core';
@@ -50,17 +48,36 @@ const useStyles = makeStyles(theme => ({
 
 const INIT_VALUES = {
   email: '',
-  password: ''
+  password: '',
+  errors: {
+    email: false,
+    password: false
+  }
 };
 
 function SignIn() {
   const classes = useStyles();
   const [fieldsObj, fieldSetter] = React.useState(INIT_VALUES);
   const { email, password } = fieldsObj;
+  const [errors, setErrors] = React.useState(INIT_VALUES.errors);
 
-  function fieldHandler(evt) {
+  function setErrorHandling(name, value) {
+    if (value.length === 0) {
+      setErrors({ ...errors, [name]: true });
+    } else {
+      setErrors({ ...errors, [name]: false });
+    }
+  }
+
+  function changeHandler(evt) {
     const { name, value } = evt.target;
+    setErrorHandling(name, value);
     fieldSetter({ ...fieldsObj, [name]: value });
+  }
+
+  function blurHandler(evt) {
+    const { name, value } = evt.target;
+    setErrorHandling(name, value);
   }
 
   function signIn() {
@@ -78,27 +95,35 @@ function SignIn() {
           </Avatar>
           <Typography>Sign In</Typography>
           <form className={classes.form}>
-            <FormControl margin="normal" fullWidth required>
-              <InputLabel htmlFor="email">Email</InputLabel>
-              <Input
-                value={email}
-                name="email"
-                autoComplete="off"
-                type="email"
-                autoFocus
-                onChange={fieldHandler}
-              />
-            </FormControl>
-            <FormControl margin="normal" fullWidth required>
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input
-                value={password}
-                name="password"
-                autoComplete="off"
-                type="password"
-                onChange={fieldHandler}
-              />
-            </FormControl>
+            <TextField
+              onBlur={blurHandler}
+              label="Email"
+              name="email"
+              value={email}
+              onChange={changeHandler}
+              autoComplete="off"
+              type="email"
+              autoFocus
+              margin="normal"
+              fullWidth
+              required
+              error={errors.email}
+              helperText="Email is required"
+            />
+            <TextField
+              onBlur={blurHandler}
+              label="Password"
+              name="password"
+              value={password}
+              onChange={changeHandler}
+              autoComplete="off"
+              type="password"
+              margin="normal"
+              fullWidth
+              required
+              error={errors.password}
+              helperText="Password is required"
+            />
             <Button
               onClick={() => signIn()}
               fullWidth

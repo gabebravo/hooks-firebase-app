@@ -2,7 +2,7 @@ import React from 'react';
 import Header from './Header';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import CreateLink from './Link/CreateLink';
-import Login from './Auth/Login';
+import Login from '../views/Login';
 import ForgotPassword from './Auth/ForgotPassword';
 import SearchLinks from './Link/SearchLinks';
 import LinkList from './Link/LinkList';
