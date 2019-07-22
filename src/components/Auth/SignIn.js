@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 import LockIcon from '@material-ui/icons/LockOutlined';
 import {
   Avatar,

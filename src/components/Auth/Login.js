@@ -1,44 +1,37 @@
 import React from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { withRouter } from 'react-router-dom';
-
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 
-class Authenticator extends React.Component {
-  state = {
-    showSignIn: true
-  };
+export default function Login() {
+  const [state, setState] = React.useState({
+    showSignIn: true,
+    tabValue: false
+  });
+  const tabIndex = state.showSignIn ? 0 : 1;
 
-  switchState = showSignIn => {
-    this.setState({ showSignIn });
-  };
-
-  handleChange = value => {
-    this.setState({ value });
-  };
-
-  render() {
-    const { showSignIn } = this.state;
-    const tabIndex = showSignIn ? 0 : 1;
-
-    return (
-      <div>
-        {showSignIn ? <SignIn /> : <SignUp redirect={this.switchState} />}
-        <Tabs
-          centered
-          value={tabIndex}
-          indicatorColor="primary"
-          textColor="primary"
-          onChange={this.handleChange}
-        >
-          <Tab label="Sign In" onClick={() => this.switchState(true)} />
-          <Tab label="Sign Up" onClick={() => this.switchState(false)} />
-        </Tabs>
-      </div>
-    );
+  function switchState() {
+    setState(state => ({ ...state, showSignIn: !state.showSignIn }));
   }
-}
 
-export default withRouter(Authenticator);
+  function handleChange(value) {
+    setState({ ...state, tabValue: value });
+  }
+
+  return (
+    <div>
+      {state.showSignIn ? <SignIn /> : <SignUp />}
+      <Tabs
+        centered
+        value={tabIndex}
+        indicatorColor="primary"
+        textColor="primary"
+        onChange={handleChange}
+      >
+        <Tab label="Sign In" onClick={() => switchState()} />
+        <Tab label="Sign Up" onClick={() => switchState()} />
+      </Tabs>
+    </div>
+  );
+}
