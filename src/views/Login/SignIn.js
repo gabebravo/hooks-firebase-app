@@ -65,7 +65,7 @@ function SignIn() {
   const { email, password } = values;
 
   async function authenticateUser() {
-    const response = await firebase.login(email, password);
+    const response = await firebase.login(email.value, password.value);
     console.log('response:', { response });
   }
 

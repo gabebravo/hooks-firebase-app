@@ -66,7 +66,11 @@ export default function SignUp() {
   const { name, email, password } = values;
 
   async function registerUser() {
-    const response = await firebase.register(name, email, password);
+    const response = await firebase.register(
+      name.value,
+      email.value,
+      password.value
+    );
     console.log('response:', { response });
   }
 
