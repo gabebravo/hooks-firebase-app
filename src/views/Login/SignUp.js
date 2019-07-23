@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import LockIcon from '@material-ui/icons/LockOutlined';
 import { useForm } from '../../hooks';
+import firebase from '../../firebase';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -59,9 +60,15 @@ const INIT_VALUES = {
 export default function SignUp() {
   const classes = useStyles();
   const { handleSubmit, handleBlur, handleChange, values } = useForm(
-    INIT_VALUES
+    INIT_VALUES,
+    registerUser
   );
   const { name, email, password } = values;
+
+  async function registerUser() {
+    const response = await firebase.register(name, email, password);
+    console.log('response:', { response });
+  }
 
   return (
     <div className={classes.root}>
