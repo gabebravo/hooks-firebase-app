@@ -66,12 +66,12 @@ export default function SignUp() {
   const { name, email, password } = values;
 
   async function registerUser() {
-    const response = await firebase.register(
-      name.value,
-      email.value,
-      password.value
-    );
-    console.log('response:', { response });
+    try {
+      await firebase.register(name.value, email.value, password.value);
+    } catch (err) {
+      console.error('Authentication Error', err);
+      console.log('message', err.message);
+    }
   }
 
   return (

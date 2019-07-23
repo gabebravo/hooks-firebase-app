@@ -65,8 +65,12 @@ function SignIn() {
   const { email, password } = values;
 
   async function authenticateUser() {
-    const response = await firebase.login(email.value, password.value);
-    console.log('response:', { response });
+    try {
+      await firebase.login(email.value, password.value);
+    } catch (err) {
+      console.error('Authentication Error', err);
+      console.log('message', err.message);
+    }
   }
 
   return (
