@@ -10,7 +10,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 import LockIcon from '@material-ui/icons/LockOutlined';
-import { validateSignup } from '../../helpers';
+import { validateSignup, transformLoginFields } from '../../helpers';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -95,7 +95,7 @@ export default function SignUp() {
     if (hasErrors) {
       console.log('Please fix errors');
     } else {
-      console.log('data:', fieldsObj);
+      console.log('data:', transformLoginFields(fieldsObj));
       fieldSetter(INIT_VALUES);
     }
   }

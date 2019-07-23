@@ -10,6 +10,7 @@ import {
   Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { validateSignup, transformLoginFields } from '../../helpers';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -50,32 +51,33 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const INIT_VALUES = {
-  email: '',
-  password: '',
-  errors: {
-    email: false,
-    password: false
-  }
+  email: { value: '', invalid: false, error: '' },
+  password: { value: '', invalid: false, error: '' }
 };
 
 function SignIn() {
   const classes = useStyles();
   const [fieldsObj, fieldSetter] = React.useState(INIT_VALUES);
   const { email, password } = fieldsObj;
-  const [errors, setErrors] = React.useState(INIT_VALUES.errors);
 
   function setErrorHandling(name, value) {
-    if (value.length === 0) {
-      setErrors({ ...errors, [name]: true });
+    const { invalid, error } = validateSignup(name, value);
+    if (invalid) {
+      fieldSetter({
+        ...fieldsObj,
+        [name]: { ...fieldsObj[name], invalid, error, value }
+      });
     } else {
-      setErrors({ ...errors, [name]: false });
+      fieldSetter({
+        ...fieldsObj,
+        [name]: { value, invalid: false, error: '' }
+      });
     }
   }
 
   function changeHandler(evt) {
     const { name, value } = evt.target;
     setErrorHandling(name, value);
-    fieldSetter({ ...fieldsObj, [name]: value });
   }
 
   function blurHandler(evt) {
@@ -84,8 +86,17 @@ function SignIn() {
   }
 
   function signIn() {
-    console.log('login clicked:', fieldsObj);
-    fieldSetter(INIT_VALUES);
+    const fieldErrArr = Object.keys(fieldsObj).map(
+      field => fieldsObj[field].invalid
+    );
+    const hasErrors = fieldErrArr.includes(true);
+
+    if (hasErrors) {
+      console.log('Please fix errors');
+    } else {
+      console.log('data:', transformLoginFields(fieldsObj));
+      fieldSetter(INIT_VALUES);
+    }
   }
 
   return (
@@ -99,33 +110,33 @@ function SignIn() {
           <Typography>Sign In</Typography>
           <form className={classes.form}>
             <TextField
-              onBlur={blurHandler}
               label="Email"
+              onBlur={blurHandler}
+              value={email.value}
               name="email"
-              value={email}
-              onChange={changeHandler}
               autoComplete="off"
               type="email"
-              autoFocus
+              onChange={changeHandler}
               margin="normal"
+              autoFocus
               fullWidth
               required
-              error={errors.email}
-              helperText={errors.email && 'Email is required'}
+              error={email.invalid}
+              helperText={email.error}
             />
             <TextField
-              onBlur={blurHandler}
               label="Password"
+              onBlur={blurHandler}
+              value={password.value}
               name="password"
-              value={password}
-              onChange={changeHandler}
               autoComplete="off"
               type="password"
+              onChange={changeHandler}
               margin="normal"
               fullWidth
               required
-              error={errors.password}
-              helperText={errors.password && 'Password is required'}
+              error={password.invalid}
+              helperText={password.error}
             />
             <Button
               onClick={() => signIn()}

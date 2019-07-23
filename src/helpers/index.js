@@ -30,3 +30,11 @@ export function validateSignup(name, value) {
 
   return error;
 }
+
+export function transformLoginFields(dataObj) {
+  const fieldErrArr = Object.keys(dataObj).reduce((acc, key) => {
+    acc[key] = dataObj[key].value;
+    return acc;
+  }, {});
+  return fieldErrArr;
+}
