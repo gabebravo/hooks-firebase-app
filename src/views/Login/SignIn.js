@@ -108,7 +108,7 @@ function SignIn() {
               fullWidth
               required
               error={errors.email}
-              helperText="Email is required"
+              helperText={errors.email && 'Email is required'}
             />
             <TextField
               onBlur={blurHandler}
@@ -122,7 +122,7 @@ function SignIn() {
               fullWidth
               required
               error={errors.password}
-              helperText="Password is required"
+              helperText={errors.password && 'Password is required'}
             />
             <Button
               onClick={() => signIn()}
