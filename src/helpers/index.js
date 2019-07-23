@@ -1,34 +1,32 @@
-export function validateFields(evt, errors) {
-  const { name, value } = evt.target;
+export function validateSignup(name, value) {
+  let error = { notValid: false, message: '' };
 
-  // if (reset) {
-  //   errors = {};
-  // }
-
-  // Email Name
+  // name
   if (name === 'name' && !value) {
-    errors.name = 'Name required';
-    return errors;
+    error.notValid = true;
+    error.message = 'Name is required';
   }
 
   // Email Errors
   if (name === 'email' && !value) {
-    errors.email = 'Email required';
-    return errors;
+    error.notValid = true;
+    error.message = 'Email required';
   } else if (
     name === 'email' &&
     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)
   ) {
-    errors.email = 'Invalid email address';
-    return errors;
+    error.notValid = true;
+    error.message = 'Invalid email address';
   }
 
   // Password Errors
   if (name === 'password' && !value) {
-    errors.password = 'Password required';
-    return errors;
-  } else if ((name === 'password' && !value) || value.length < 6) {
-    errors.password = 'Password must be at least 6 characters';
-    return errors;
+    error.notValid = true;
+    error.message = 'Password required';
+  } else if (name === 'password' && value.length < 6) {
+    error.notValid = true;
+    error.message = 'Password must be at least 6 characters';
   }
+
+  return error;
 }
