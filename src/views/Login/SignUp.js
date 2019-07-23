@@ -7,7 +7,12 @@ import {
   TextField,
   Paper,
   Typography,
-  makeStyles
+  makeStyles,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
 } from '@material-ui/core';
 import LockIcon from '@material-ui/icons/LockOutlined';
 import { useForm } from '../../hooks';
@@ -57,8 +62,11 @@ const INIT_VALUES = {
   password: { value: '', invalid: false, error: '' }
 };
 
+const INIT_MODAL = { showModal: false, message: '' };
+
 export default function SignUp() {
   const classes = useStyles();
+  const [modal, setModal] = React.useState(INIT_MODAL);
   const { handleSubmit, handleBlur, handleChange, values } = useForm(
     INIT_VALUES,
     registerUser
@@ -70,12 +78,29 @@ export default function SignUp() {
       await firebase.register(name.value, email.value, password.value);
     } catch (err) {
       console.error('Authentication Error', err);
-      console.log('message', err.message);
+      setModal({ showModal: true, message: err.message });
     }
   }
 
   return (
     <div className={classes.root}>
+      {modal.showModal ? (
+        <Dialog open={modal.showModal} onClose={() => setModal(INIT_MODAL)}>
+          <DialogTitle>Authentication Error</DialogTitle>
+          <DialogContent>
+            <DialogContentText>{modal.message || 'NA'}</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => setModal(INIT_MODAL)}
+              color="primary"
+              autoFocus
+            >
+              OK
+            </Button>
+          </DialogActions>
+        </Dialog>
+      ) : null}
       <CssBaseline />
       <main className={classes.layout}>
         <Paper className={classes.paper}>
