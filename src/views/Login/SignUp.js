@@ -51,38 +51,34 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const INIT_VALUES = {
-  name: '',
-  email: '',
-  password: '',
-  errors: {
-    name: false,
-    nameError: '',
-    email: false,
-    emailError: '',
-    password: false,
-    passwordError: ''
-  }
+  name: { value: '', invalid: false, error: '' },
+  email: { value: '', invalid: false, error: '' },
+  password: { value: '', invalid: false, error: '' }
 };
 
 export default function SignUp() {
   const classes = useStyles();
   const [fieldsObj, fieldSetter] = React.useState(INIT_VALUES);
   const { name, email, password } = fieldsObj;
-  const [errors, setErrors] = React.useState(INIT_VALUES.errors);
 
   function setErrorHandling(name, value) {
-    const { notValid, message } = validateSignup(name, value);
-    if (notValid) {
-      setErrors({ ...errors, [name]: true, [`${name}Error`]: message });
+    const { invalid, error } = validateSignup(name, value);
+    if (invalid) {
+      fieldSetter({
+        ...fieldsObj,
+        [name]: { ...fieldsObj[name], invalid, error, value }
+      });
     } else {
-      setErrors({ ...errors, [name]: false, [`${name}Error`]: '' });
+      fieldSetter({
+        ...fieldsObj,
+        [name]: { value, invalid: false, error: '' }
+      });
     }
   }
 
   function changeHandler(evt) {
     const { name, value } = evt.target;
     setErrorHandling(name, value);
-    fieldSetter({ ...fieldsObj, [name]: value });
   }
 
   function blurHandler(evt) {
@@ -91,8 +87,17 @@ export default function SignUp() {
   }
 
   function signUp() {
-    console.log('save clicked:', fieldsObj);
-    fieldSetter(INIT_VALUES);
+    const fieldErrArr = Object.keys(fieldsObj).map(
+      field => fieldsObj[field].invalid
+    );
+    const hasErrors = fieldErrArr.includes(true);
+
+    if (hasErrors) {
+      console.log('Please fix errors');
+    } else {
+      console.log('data:', fieldsObj);
+      fieldSetter(INIT_VALUES);
+    }
   }
 
   return (
@@ -108,7 +113,7 @@ export default function SignUp() {
             <TextField
               label="Name"
               onBlur={blurHandler}
-              value={name}
+              value={name.value}
               name="name"
               autoComplete="off"
               autoFocus
@@ -116,13 +121,13 @@ export default function SignUp() {
               margin="normal"
               fullWidth
               required
-              error={errors.name}
-              helperText={errors.nameError}
+              error={name.invalid}
+              helperText={name.error}
             />
             <TextField
               label="Email"
               onBlur={blurHandler}
-              value={email}
+              value={email.value}
               name="email"
               autoComplete="off"
               type="email"
@@ -130,13 +135,13 @@ export default function SignUp() {
               margin="normal"
               fullWidth
               required
-              error={errors.email}
-              helperText={errors.emailError}
+              error={email.invalid}
+              helperText={email.error}
             />
             <TextField
               label="Password"
               onBlur={blurHandler}
-              value={password}
+              value={password.value}
               name="password"
               autoComplete="off"
               type="password"
@@ -144,8 +149,8 @@ export default function SignUp() {
               margin="normal"
               fullWidth
               required
-              error={errors.password}
-              helperText={errors.passwordError}
+              error={password.invalid}
+              helperText={password.error}
             />
             <Button
               onClick={() => signUp()}
