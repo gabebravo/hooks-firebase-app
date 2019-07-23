@@ -13,7 +13,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    marginTop: '10%'
+    marginTop: '10%',
+    [theme.breakpoints.down('sm')]: {
+      marginTop: '35%'
+    }
   },
   layout: {
     width: 'auto',
