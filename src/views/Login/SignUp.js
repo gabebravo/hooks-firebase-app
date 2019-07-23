@@ -10,7 +10,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 import LockIcon from '@material-ui/icons/LockOutlined';
-import { validateSignup, transformLoginFields } from '../../helpers';
+import { useForm } from '../../hooks';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -58,47 +58,10 @@ const INIT_VALUES = {
 
 export default function SignUp() {
   const classes = useStyles();
-  const [fieldsObj, fieldSetter] = React.useState(INIT_VALUES);
-  const { name, email, password } = fieldsObj;
-
-  function setErrorHandling(name, value) {
-    const { invalid, error } = validateSignup(name, value);
-    if (invalid) {
-      fieldSetter({
-        ...fieldsObj,
-        [name]: { ...fieldsObj[name], invalid, error, value }
-      });
-    } else {
-      fieldSetter({
-        ...fieldsObj,
-        [name]: { value, invalid: false, error: '' }
-      });
-    }
-  }
-
-  function changeHandler(evt) {
-    const { name, value } = evt.target;
-    setErrorHandling(name, value);
-  }
-
-  function blurHandler(evt) {
-    const { name, value } = evt.target;
-    setErrorHandling(name, value);
-  }
-
-  function signUp() {
-    const fieldErrArr = Object.keys(fieldsObj).map(
-      field => fieldsObj[field].invalid
-    );
-    const hasErrors = fieldErrArr.includes(true);
-
-    if (hasErrors) {
-      console.log('Please fix errors');
-    } else {
-      console.log('data:', transformLoginFields(fieldsObj));
-      fieldSetter(INIT_VALUES);
-    }
-  }
+  const { handleSubmit, handleBlur, handleChange, values } = useForm(
+    INIT_VALUES
+  );
+  const { name, email, password } = values;
 
   return (
     <div className={classes.root}>
@@ -112,12 +75,12 @@ export default function SignUp() {
           <form className={classes.form}>
             <TextField
               label="Name"
-              onBlur={blurHandler}
+              onBlur={handleBlur}
               value={name.value}
               name="name"
               autoComplete="off"
               autoFocus
-              onChange={changeHandler}
+              onChange={handleChange}
               margin="normal"
               fullWidth
               required
@@ -126,12 +89,12 @@ export default function SignUp() {
             />
             <TextField
               label="Email"
-              onBlur={blurHandler}
+              onBlur={handleBlur}
               value={email.value}
               name="email"
               autoComplete="off"
               type="email"
-              onChange={changeHandler}
+              onChange={handleChange}
               margin="normal"
               fullWidth
               required
@@ -140,12 +103,12 @@ export default function SignUp() {
             />
             <TextField
               label="Password"
-              onBlur={blurHandler}
+              onBlur={handleBlur}
               value={password.value}
               name="password"
               autoComplete="off"
               type="password"
-              onChange={changeHandler}
+              onChange={handleChange}
               margin="normal"
               fullWidth
               required
@@ -153,7 +116,7 @@ export default function SignUp() {
               helperText={password.error}
             />
             <Button
-              onClick={() => signUp()}
+              onClick={() => handleSubmit()}
               fullWidth
               variant="contained"
               color="primary"
