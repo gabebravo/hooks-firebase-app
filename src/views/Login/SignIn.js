@@ -63,7 +63,7 @@ const INIT_VALUES = {
 
 const INIT_MODAL = { showModal: false, message: '' };
 
-function SignIn() {
+function SignIn(props) {
   const classes = useStyles();
   const [modal, setModal] = React.useState(INIT_MODAL);
   const { handleSubmit, handleBlur, handleChange, values } = useForm(
@@ -75,6 +75,7 @@ function SignIn() {
   async function authenticateUser() {
     try {
       await firebase.login(email.value, password.value);
+      props.history.push('/');
     } catch (err) {
       console.error('Authentication Error', err);
       setModal({ showModal: true, message: err.message });

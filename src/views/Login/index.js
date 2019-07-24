@@ -4,7 +4,7 @@ import Tab from '@material-ui/core/Tab';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 
-export default function Login() {
+export default function Login(props) {
   const [state, setState] = React.useState({
     showSignIn: true,
     tabValue: false
@@ -21,7 +21,7 @@ export default function Login() {
 
   return (
     <div>
-      {state.showSignIn ? <SignIn /> : <SignUp />}
+      {state.showSignIn ? <SignIn {...props} /> : <SignUp {...props} />}
       <Tabs
         centered
         value={tabIndex}
