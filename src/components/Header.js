@@ -18,6 +18,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import LinkIcon from '@material-ui/icons/Link';
 import { withRouter, NavLink } from 'react-router-dom';
+import { FirebaseContext } from '../context';
 
 const drawerWidth = 240;
 
@@ -100,6 +101,7 @@ function Header({ headerText }) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const { user, firebase } = React.useContext(FirebaseContext);
 
   function handleDrawerOpen() {
     setOpen(true);
@@ -146,11 +148,22 @@ function Header({ headerText }) {
               {headerText}
             </NavLink>
           </Typography>
-          <Button className={classes.loginButton} color="inherit">
-            <NavLink className={classes.linkStyles} to="/login">
-              LOGIN
-            </NavLink>
-          </Button>
+          {user ? (
+            <>
+              <div>{user.displayName} | </div>
+              <Button className={classes.loginButton} color="inherit">
+                <NavLink className={classes.linkStyles} to="/login">
+                  LOG OUT
+                </NavLink>
+              </Button>
+            </>
+          ) : (
+            <Button className={classes.loginButton} color="inherit">
+              <NavLink className={classes.linkStyles} to="/login">
+                LOGIN
+              </NavLink>
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -177,81 +190,8 @@ function Header({ headerText }) {
         </List>
         <Divider />
       </Drawer>
-      {/* <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open
-        })}
-      >
-        <div className={classes.drawerHeader} />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-          dolor purus non enim praesent elementum facilisis leo vel. Risus at
-          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
-          quisque non tellus. Convallis convallis tellus id interdum velit
-          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
-          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
-          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
-          faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
-          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
-          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
-          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
-          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
-          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
-          morbi tristique senectus et. Adipiscing elit duis tristique
-          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
-      </main> */}
     </div>
   );
 }
 
 export default withRouter(Header);
-
-// import React from 'react';
-// import { makeStyles } from '@material-ui/core/styles';
-// import { AppBar, Toolbar, Typography } from '@material-ui/core';
-// import { withRouter, NavLink } from 'react-router-dom';
-
-// const useStyles = makeStyles(theme => ({
-//   root: {
-//     flexGrow: 1
-//   },
-//   menuButton: {
-//     marginRight: theme.spacing(2)
-//   }
-// }));
-
-// function Header({ headerText }) {
-//   const classes = useStyles();
-
-//   return (
-//     <div className={classes.root}>
-//       <AppBar position="static">
-//         <Toolbar variant="dense">
-//           <Typography variant="h6" color="inherit">
-//             <NavLink to="/">{headerText}</NavLink>
-//           </Typography>
-//           <NavLink to="/">New</NavLink>
-//           <NavLink to="/top">Top</NavLink>
-//           <NavLink to="/search">Search</NavLink>
-//           <NavLink to="/create">Submit</NavLink>
-//           <NavLink to="/login">Login</NavLink>
-//         </Toolbar>
-//       </AppBar>
-//     </div>
-//   );
-// }
-
-// export default withRouter(Header);
