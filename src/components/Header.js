@@ -111,17 +111,23 @@ function Header({ headerText }) {
     setOpen(false);
   }
 
+  function logoutUser() {
+    firebase.logout();
+  }
+
   function returnNavLink(text) {
-    return (
-      <NavLink key={text} className={classes.menuLinkStyles} to={links[text]}>
-        <ListItem button>
-          <ListItemIcon>
-            <LinkIcon />
-          </ListItemIcon>
-          <ListItemText primary={text} />
-        </ListItem>
-      </NavLink>
-    );
+    if (text !== 'Submit' || (text === 'Submit' && user)) {
+      return (
+        <NavLink key={text} className={classes.menuLinkStyles} to={links[text]}>
+          <ListItem button>
+            <ListItemIcon>
+              <LinkIcon />
+            </ListItemIcon>
+            <ListItemText primary={text} />
+          </ListItem>
+        </NavLink>
+      );
+    }
   }
 
   return (
@@ -151,10 +157,12 @@ function Header({ headerText }) {
           {user ? (
             <>
               <div>{user.displayName} | </div>
-              <Button className={classes.loginButton} color="inherit">
-                <NavLink className={classes.linkStyles} to="/login">
-                  LOG OUT
-                </NavLink>
+              <Button
+                onClick={logoutUser}
+                className={classes.loginButton}
+                color="inherit"
+              >
+                LOG OUT
               </Button>
             </>
           ) : (

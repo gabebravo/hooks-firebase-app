@@ -26,6 +26,11 @@ class Firebase {
   async login(email, password) {
     return await this.auth.signInWithEmailAndPassword(email, password);
   }
+
+  // logout method will return the promise from the API
+  async logout() {
+    return await this.auth.signOut();
+  }
 }
 
 // Instantiate an instance and export it
