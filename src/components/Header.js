@@ -72,21 +72,23 @@ const useStyles = makeStyles(theme => ({
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end'
   },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    marginLeft: -drawerWidth
+  toolbarWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '85%',
+    [theme.breakpoints.down('sm')]: {
+      width: '51%'
+    }
   },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    }),
-    marginLeft: 0
+  buttonWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '15%',
+    justifyContent: 'center',
+    [theme.breakpoints.down('sm')]: {
+      width: '49%',
+      justifyContent: 'flex-end'
+    }
   }
 }));
 
@@ -140,38 +142,38 @@ function Header({ headerText }) {
         })}
       >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="Open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            <NavLink className={classes.linkStyles} to="/">
-              {headerText}
-            </NavLink>
-          </Typography>
-          {user ? (
-            <>
-              <div>{user.displayName} | </div>
-              <Button
-                onClick={logoutUser}
-                className={classes.loginButton}
-                color="inherit"
-              >
-                LOG OUT
-              </Button>
-            </>
-          ) : (
-            <Button className={classes.loginButton} color="inherit">
-              <NavLink className={classes.linkStyles} to="/login">
-                LOGIN
+          <div className={classes.toolbarWrapper}>
+            <IconButton
+              color="inherit"
+              aria-label="Open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, open && classes.hide)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap>
+              <NavLink className={classes.linkStyles} to="/">
+                {headerText}
               </NavLink>
-            </Button>
-          )}
+            </Typography>
+          </div>
+          <div className={classes.buttonWrapper}>
+            {user ? (
+              <>
+                <div style={{ fontSize: '1rem' }}>{user.displayName} | </div>
+                <Button onClick={logoutUser} color="inherit">
+                  LOG OUT
+                </Button>
+              </>
+            ) : (
+              <Button className={classes.loginButton} color="inherit">
+                <NavLink className={classes.linkStyles} to="/login">
+                  LOGIN
+                </NavLink>
+              </Button>
+            )}
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer
