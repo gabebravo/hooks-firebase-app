@@ -31,6 +31,11 @@ class Firebase {
   async logout() {
     return await this.auth.signOut();
   }
+
+  // reset method will return the promise from the API
+  async resetPassword(email) {
+    return await this.auth.sendPasswordResetEmail(email);
+  }
 }
 
 // Instantiate an instance and export it

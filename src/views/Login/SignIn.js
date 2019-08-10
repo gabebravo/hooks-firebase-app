@@ -6,6 +6,7 @@ import {
   Button,
   CssBaseline,
   TextField,
+  Link,
   Paper,
   Typography,
   Dialog,
@@ -138,6 +139,15 @@ function SignIn(props) {
               error={password.invalid}
               helperText={password.error}
             />
+            <Link
+              component="button"
+              variant="body2"
+              onClick={() => {
+                props.history.push('/forgot');
+              }}
+            >
+              Forgot Password?
+            </Link>
             <Button
               onClick={() => handleSubmit()}
               fullWidth

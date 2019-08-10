@@ -1,7 +1,7 @@
 import React from 'react';
 import { validateSignup, transformLoginFields } from '../helpers';
 
-function useForm(initialState, authenticate) {
+function useForm(initialState, callback) {
   const [fieldsObj, fieldSetter] = React.useState(initialState);
 
   function setErrorHandling(name, value) {
@@ -40,7 +40,7 @@ function useForm(initialState, authenticate) {
     } else {
       console.log('data:', transformLoginFields(fieldsObj));
       fieldSetter(initialState);
-      authenticate();
+      callback();
     }
   }
 
