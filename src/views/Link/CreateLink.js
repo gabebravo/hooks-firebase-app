@@ -15,8 +15,9 @@ import {
   DialogActions
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { FirebaseContext } from '../../context';
 import { useForm } from '../../hooks';
-// import firebase from '../../firebase';
+import { transformLinkFields } from '../../helpers';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -61,10 +62,11 @@ const INIT_VALUES = {
   url: { value: '', invalid: false, error: '' }
 };
 
-const INIT_MODAL = { showModal: false, message: '' };
+const INIT_MODAL = { showModal: false, message: '', redirect: '/' };
 
 function CreateLink(props) {
   const classes = useStyles();
+  const { user, firebase } = React.useContext(FirebaseContext);
   const [modal, setModal] = React.useState(INIT_MODAL);
   const { handleSubmit, handleChange, values } = useForm(
     INIT_VALUES,
@@ -72,31 +74,48 @@ function CreateLink(props) {
   );
   const { description, url } = values;
 
+  // formats fields and user info into a record to write to the FS db
   async function handleCreateLink() {
-    console.log('add link submitted');
+    try {
+      if (!user) {
+        setModal({
+          showModal: true,
+          message: 'You must be logged-in',
+          redirect: '/login'
+        });
+      } else {
+        const formattedLinkEntry = transformLinkFields({
+          description,
+          url,
+          user
+        }); // if the collection doesn't exist, FS will create it on the first write
+        await firebase.db.collection('links').add(formattedLinkEntry);
+        setModal({
+          showModal: true,
+          message: 'Your link has been added',
+          redirect: '/'
+        });
+      }
+    } catch (err) {
+      console.error(`Couldn't Add Link`, err);
+      setModal({ showModal: true, message: err.message, redirect: '/' });
+    }
   }
-
-  // async function authenticateUser() {
-  //   try {
-  //     await firebase.login(email.value, url.value);
-  //     props.history.push('/');
-  //   } catch (err) {
-  //     console.error('Authentication Error', err);
-  //     setModal({ showModal: true, message: err.message });
-  //   }
-  // }
 
   return (
     <div className={classes.root}>
       {modal.showModal ? (
         <Dialog open={modal.showModal} onClose={() => setModal(INIT_MODAL)}>
-          <DialogTitle>Authentication Error</DialogTitle>
+          <DialogTitle>Link Submission Message</DialogTitle>
           <DialogContent>
             <DialogContentText>{modal.message || 'NA'}</DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button
-              onClick={() => setModal(INIT_MODAL)}
+              onClick={() => {
+                setModal(INIT_MODAL);
+                props.history.push(modal.redirect);
+              }}
               color="primary"
               autoFocus
             >

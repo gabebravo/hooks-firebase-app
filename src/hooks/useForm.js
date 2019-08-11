@@ -24,7 +24,7 @@ function useForm(initialState, callback) {
     setErrorHandling(name, value);
   }
 
-  // TEST WHETHER THIS IS CAUSING THE JANKINESS
+  // WILL CAUSE JANKINESS IN UI EVENTS
   function blurHandler(evt) {
     const { name, value } = evt.target;
     setErrorHandling(name, value);

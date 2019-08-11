@@ -49,12 +49,25 @@ export function validateFields(name, value) {
   return error;
 }
 
-// VALIDATE CREATE LINK
-
 export function transformLoginFields(dataObj) {
   const fieldErrArr = Object.keys(dataObj).reduce((acc, key) => {
     acc[key] = dataObj[key].value;
     return acc;
   }, {});
   return fieldErrArr;
+}
+
+export function transformLinkFields({ description, url, user }) {
+  const linkObj = {
+    url,
+    description,
+    postedBy: {
+      id: user.uid,
+      name: user.displayName
+    },
+    votes: [],
+    comments: [],
+    created: Date.now()
+  };
+  return linkObj;
 }
