@@ -67,7 +67,7 @@ const INIT_MODAL = { showModal: false, message: '' };
 export default function SignUp(props) {
   const classes = useStyles();
   const [modal, setModal] = React.useState(INIT_MODAL);
-  const { handleSubmit, handleBlur, handleChange, values } = useForm(
+  const { handleSubmit, handleChange, values } = useForm(
     INIT_VALUES,
     registerUser
   );
@@ -112,7 +112,6 @@ export default function SignUp(props) {
           <form className={classes.form}>
             <TextField
               label="Name"
-              onBlur={handleBlur}
               value={name.value}
               name="name"
               autoComplete="off"
@@ -126,7 +125,6 @@ export default function SignUp(props) {
             />
             <TextField
               label="Email"
-              onBlur={handleBlur}
               value={email.value}
               name="email"
               autoComplete="off"
@@ -140,7 +138,6 @@ export default function SignUp(props) {
             />
             <TextField
               label="Password"
-              onBlur={handleBlur}
               value={password.value}
               name="password"
               autoComplete="off"

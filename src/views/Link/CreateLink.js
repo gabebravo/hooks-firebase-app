@@ -66,7 +66,7 @@ const INIT_MODAL = { showModal: false, message: '' };
 function CreateLink(props) {
   const classes = useStyles();
   const [modal, setModal] = React.useState(INIT_MODAL);
-  const { handleSubmit, handleBlur, handleChange, values } = useForm(
+  const { handleSubmit, handleChange, values } = useForm(
     INIT_VALUES,
     handleCreateLink
   );
@@ -115,7 +115,6 @@ function CreateLink(props) {
           <form className={classes.form}>
             <TextField
               label="Description"
-              onBlur={handleBlur}
               value={description.value}
               name="description"
               autoComplete="off"
@@ -130,7 +129,6 @@ function CreateLink(props) {
             />
             <TextField
               label="URL"
-              onBlur={handleBlur}
               value={url.value}
               name="url"
               autoComplete="off"

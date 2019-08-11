@@ -65,7 +65,7 @@ const INIT_MODAL = { showModal: false, message: '' };
 function ForgotPassword(props) {
   const classes = useStyles();
   const [modal, setModal] = React.useState(INIT_MODAL);
-  const { handleSubmit, handleBlur, handleChange, values } = useForm(
+  const { handleSubmit, handleChange, values } = useForm(
     INIT_VALUES,
     resetHandler
   );
@@ -110,7 +110,6 @@ function ForgotPassword(props) {
           <form className={classes.form}>
             <TextField
               label="Email"
-              onBlur={handleBlur}
               value={email.value}
               name="email"
               autoComplete="off"
