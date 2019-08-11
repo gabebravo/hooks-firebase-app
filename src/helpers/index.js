@@ -1,4 +1,4 @@
-export function validateSignup(name, value) {
+export function validateFields(name, value) {
   let error = { invalid: false, error: '' };
 
   // name
@@ -28,8 +28,28 @@ export function validateSignup(name, value) {
     error.error = 'Password must be at least 6 characters';
   }
 
+  // Description Errors
+  if (name === 'description' && !value) {
+    error.invalid = true;
+    error.error = 'Description required';
+  } else if (name === 'description' && value.length < 10) {
+    error.invalid = true;
+    error.error = 'Description must be at least 10 characters';
+  }
+
+  // URL Errors
+  if (name === 'url' && !value) {
+    error.invalid = true;
+    error.error = 'URL required';
+  } else if (name === 'url' && !/^(ftp|http|https):\/\/[^ "]+$/i.test(value)) {
+    error.invalid = true;
+    error.error = 'Invalid URL address';
+  }
+
   return error;
 }
+
+// VALIDATE CREATE LINK
 
 export function transformLoginFields(dataObj) {
   const fieldErrArr = Object.keys(dataObj).reduce((acc, key) => {

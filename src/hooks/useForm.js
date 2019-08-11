@@ -1,11 +1,11 @@
 import React from 'react';
-import { validateSignup, transformLoginFields } from '../helpers';
+import { validateFields, transformLoginFields } from '../helpers';
 
 function useForm(initialState, callback) {
   const [fieldsObj, fieldSetter] = React.useState(initialState);
 
   function setErrorHandling(name, value) {
-    const { invalid, error } = validateSignup(name, value);
+    const { invalid, error } = validateFields(name, value);
     if (invalid) {
       fieldSetter({
         ...fieldsObj,
@@ -24,10 +24,11 @@ function useForm(initialState, callback) {
     setErrorHandling(name, value);
   }
 
-  function blurHandler(evt) {
-    const { name, value } = evt.target;
-    setErrorHandling(name, value);
-  }
+  // TEST WHETHER THIS IS CAUSING THE JANKINESS
+  // function blurHandler(evt) {
+  //   const { name, value } = evt.target;
+  //   setErrorHandling(name, value);
+  // }
 
   function handleSubmit() {
     const fieldErrArr = Object.keys(fieldsObj).map(
