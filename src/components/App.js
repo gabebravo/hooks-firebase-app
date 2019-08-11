@@ -3,7 +3,7 @@ import Header from './Header';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import CreateLink from '../views/Link/CreateLink';
 import Login from '../views/Login';
-import ForgotPassword from './Auth/ForgotPassword';
+import ForgotPassword from '../views/Auth/ForgotPassword';
 import SearchLinks from '../views/Link/SearchLinks';
 import LinkList from '../views/Link/LinkList';
 import LinkDetail from '../views/Link/LinkDetail';

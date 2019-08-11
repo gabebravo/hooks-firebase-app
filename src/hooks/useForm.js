@@ -25,10 +25,10 @@ function useForm(initialState, callback) {
   }
 
   // TEST WHETHER THIS IS CAUSING THE JANKINESS
-  // function blurHandler(evt) {
-  //   const { name, value } = evt.target;
-  //   setErrorHandling(name, value);
-  // }
+  function blurHandler(evt) {
+    const { name, value } = evt.target;
+    setErrorHandling(name, value);
+  }
 
   function handleSubmit() {
     const fieldErrArr = Object.keys(fieldsObj).map(
