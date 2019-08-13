@@ -1,8 +1,25 @@
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { Grid, List } from '@material-ui/core';
 import { FirebaseContext } from '../../context';
+import LinkItem from './LinkItem';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    fontFamily: 'sans-serif',
+    marginTop: 100
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary
+  }
+}));
 
 function LinkList(props) {
+  const classes = useStyles();
   const { firebase } = React.useContext(FirebaseContext);
+  const [links, setLinks] = React.useState(null);
 
   const getLinks = React.useCallback(() => {
     // onSnapShot can call a callback if its passed as an arg
@@ -19,10 +36,28 @@ function LinkList(props) {
       return { id: doc.id, ...doc.data() };
     });
 
-    console.log('links:', { links });
+    setLinks(links);
   }
 
-  return <div style={{ fontSize: '22rem' }}>LinkList</div>;
+  function renderLinks(links) {
+    return (
+      <List>
+        {links.map((link, index) => (
+          <LinkItem key={link.id} {...link} count={index + 1} />
+        ))}
+      </List>
+    );
+  }
+
+  return (
+    <div className={classes.root}>
+      <Grid container justify="center" spacing={3}>
+        <Grid item xs={10}>
+          {links ? renderLinks(links) : null}
+        </Grid>
+      </Grid>
+    </div>
+  );
 }
 
 export default LinkList;
