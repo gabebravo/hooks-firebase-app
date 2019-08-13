@@ -4,14 +4,14 @@ import { FirebaseContext } from '../../context';
 function LinkList(props) {
   const { firebase } = React.useContext(FirebaseContext);
 
-  React.useEffect(() => {
-    getLinks();
-  }, []);
-
-  function getLinks() {
+  const getLinks = React.useCallback(() => {
     // onSnapShot can call a callback if its passed as an arg
     firebase.db.collection('links').onSnapshot(handleSnapshot);
-  }
+  }, [firebase.db]);
+
+  React.useEffect(() => {
+    getLinks();
+  }, [getLinks]);
 
   // the snapshot arg is a copy of our data >> snapshot.docs is an array
   function handleSnapshot(snapshot) {
