@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Grid, Button } from '@material-ui/core';
 import { getDomain } from '../../helpers';
 import distanceInDateToNow from 'date-fns/distance_in_words_to_now';
+import { FirebaseContext } from '../../context';
+import { withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   gridWrapper: {
@@ -50,9 +52,28 @@ function LinkItem({
   postedBy,
   url,
   votes,
-  count
+  count,
+  history
 }) {
   const classes = useStyles();
+  const { user, firebase } = React.useContext(FirebaseContext);
+
+  function handleVote() {
+    if (!user) {
+      history.push('/login');
+    } else {
+      const voteRef = firebase.db.collection('links').doc(id);
+      voteRef.get().then(doc => {
+        if (doc.exists) {
+          const prevVotes = doc.data().votes;
+          const newVote = { votedBy: { id: user.uid, name: user.displayName } };
+          const updatedVotes = [...prevVotes, newVote];
+          voteRef.update({ votes: updatedVotes });
+        }
+      });
+    }
+  }
+
   return (
     <Paper className={classes.listPaper}>
       <Grid container className={classes.gridWrapper}>
@@ -86,7 +107,12 @@ function LinkItem({
           </span>
         </Grid>
         <Grid item xs={12} md={4} className={classes.buttonWrapper}>
-          <Button variant="outlined" color="primary" className={classes.button}>
+          <Button
+            variant="outlined"
+            color="primary"
+            className={classes.button}
+            onClick={handleVote}
+          >
             Up Vote
           </Button>
         </Grid>
@@ -95,4 +121,4 @@ function LinkItem({
   );
 }
 
-export default LinkItem;
+export default withRouter(LinkItem);
