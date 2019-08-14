@@ -96,7 +96,7 @@ const links = {
   New: '/',
   Top: '/top',
   Search: '/search',
-  Submit: '/create'
+  Create: '/create'
 };
 
 function Header({ headerText }) {
@@ -118,7 +118,7 @@ function Header({ headerText }) {
   }
 
   function returnNavLink(text) {
-    if (text !== 'Submit' || (text === 'Submit' && user)) {
+    if (text !== 'Create' || (text === 'Create' && user)) {
       return (
         <NavLink key={text} className={classes.menuLinkStyles} to={links[text]}>
           <ListItem button>
@@ -196,7 +196,7 @@ function Header({ headerText }) {
         </div>
         <Divider />
         <List>
-          {['New', 'Top', 'Search', 'Submit'].map(text => returnNavLink(text))}
+          {['New', 'Top', 'Search', 'Create'].map(text => returnNavLink(text))}
         </List>
         <Divider />
       </Drawer>
