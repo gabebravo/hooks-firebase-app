@@ -59,7 +59,12 @@ function LinkItem({
         <Grid item xs={12} md={4}>
           {count}. {description && description.value} :
           <span style={{ marginLeft: 5 }}>
-            <a className={classes.link} target="_blank" href={url && url.value}>
+            <a
+              className={classes.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              href={url && url.value}
+            >
               {url && getDomain(url.value)}
             </a>
           </span>
@@ -70,7 +75,12 @@ function LinkItem({
           {distanceInDateToNow(created)} ago
           {' | '}
           <span style={{ marginLeft: 5 }}>
-            <a className={classes.link} target="_blank" href={`/link/${id}`}>
+            <a
+              className={classes.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`/link/${id}`}
+            >
               {comments.length > 0 ? `${comments.length} comments` : 'discuss'}
             </a>
           </span>
