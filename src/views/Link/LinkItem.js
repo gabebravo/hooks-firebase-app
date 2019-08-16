@@ -1,6 +1,15 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Paper, Grid, Button } from '@material-ui/core';
+import {
+  Paper,
+  Grid,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
+} from '@material-ui/core';
 import { getDomain } from '../../helpers';
 import distanceInDateToNow from 'date-fns/distance_in_words_to_now';
 import { FirebaseContext } from '../../context';
@@ -44,6 +53,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const INIT_MODAL = { showModal: false, message: '' };
+
 function LinkItem({
   id,
   comments,
@@ -56,6 +67,7 @@ function LinkItem({
   history
 }) {
   const classes = useStyles();
+  const [modal, setModal] = React.useState(INIT_MODAL);
   const { user, firebase } = React.useContext(FirebaseContext);
 
   function handleVote() {
@@ -74,50 +86,98 @@ function LinkItem({
     }
   }
 
+  function handleDelete() {
+    const linkRef = firebase.db.collection('links').doc(id);
+    linkRef
+      .delete()
+      .then(() => {
+        setModal({
+          showModal: true,
+          message: `Document with ID ${id} deleted`
+        });
+      })
+      .catch(err => {
+        console.log('Error deleting document:', err);
+      });
+  }
+
+  const postedByAuthUser = user && user.uid === postedBy.id;
+
   return (
-    <Paper className={classes.listPaper}>
-      <Grid container className={classes.gridWrapper}>
-        <Grid item xs={12} md={4}>
-          {count}. {description && description.value} :
-          <span style={{ marginLeft: 5 }}>
-            <a
-              className={classes.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              href={url && url.value}
+    <>
+      {modal.showModal ? (
+        <Dialog open={modal.showModal} onClose={() => setModal(INIT_MODAL)}>
+          <DialogTitle>Link Status</DialogTitle>
+          <DialogContent>
+            <DialogContentText>{modal.message || 'NA'}</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => setModal(INIT_MODAL)}
+              color="primary"
+              autoFocus
             >
-              {url && getDomain(url.value)}
-            </a>
-          </span>
-        </Grid>
-        <Grid item xs={12} md={4} className={classes.votesWrapper}>
-          {votes.length} votes by {postedBy.name}
-          {' • '}
-          {distanceInDateToNow(created)} ago
-          {' | '}
-          <span style={{ marginLeft: 5 }}>
-            <a
-              className={classes.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              href={`/link/${id}`}
+              OK
+            </Button>
+          </DialogActions>
+        </Dialog>
+      ) : null}
+      <Paper className={classes.listPaper}>
+        <Grid container className={classes.gridWrapper}>
+          <Grid item xs={12} md={4}>
+            {count}. {description && description.value} :
+            <span style={{ marginLeft: 5 }}>
+              <a
+                className={classes.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                href={url && url.value}
+              >
+                {url && getDomain(url.value)}
+              </a>
+            </span>
+          </Grid>
+          <Grid item xs={12} md={4} className={classes.votesWrapper}>
+            {votes.length} votes by {postedBy.name}
+            {' • '}
+            {distanceInDateToNow(created)} ago
+            {' | '}
+            <span style={{ marginLeft: 5 }}>
+              <a
+                className={classes.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                href={`/link/${id}`}
+              >
+                {comments.length > 0
+                  ? `${comments.length} comments`
+                  : 'discuss'}
+              </a>
+            </span>
+          </Grid>
+          <Grid item xs={12} md={4} className={classes.buttonWrapper}>
+            <Button
+              variant="outlined"
+              color="primary"
+              className={classes.button}
+              onClick={handleVote}
             >
-              {comments.length > 0 ? `${comments.length} comments` : 'discuss'}
-            </a>
-          </span>
+              Up Vote
+            </Button>
+            {postedByAuthUser && (
+              <Button
+                variant="outlined"
+                color="secondary"
+                className={classes.button}
+                onClick={handleDelete}
+              >
+                Delete
+              </Button>
+            )}
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={4} className={classes.buttonWrapper}>
-          <Button
-            variant="outlined"
-            color="primary"
-            className={classes.button}
-            onClick={handleVote}
-          >
-            Up Vote
-          </Button>
-        </Grid>
-      </Grid>
-    </Paper>
+      </Paper>
+    </>
   );
 }
 
