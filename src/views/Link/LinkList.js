@@ -25,7 +25,7 @@ function LinkList(props) {
     // onSnapShot can call a callback if its passed as an arg
     firebase.db
       .collection('links')
-      .orderBy('created', 'desc')
+      .orderBy('created', 'desc') // this sort it into descending order
       .onSnapshot(handleSnapshot);
   }, [firebase.db]);
 
@@ -42,20 +42,12 @@ function LinkList(props) {
     setLinks(links);
   }
 
-  // if the route is top then sort it by votes
-  function sortByVotes(a, b) {
-    if (a.votes.length > b.votes.length) {
-      return -1;
-    } else if (b.votes.length > a.votes.length) {
-      return 1;
-    }
-    return 0;
-  }
-
   function renderLinks(links) {
     // check if the path is the new route vs top
     const isNew = props.location.pathname.includes('new');
-    const sortedLinks = isNew ? links : [...links].sort(sortByVotes);
+    const sortedLinks = isNew
+      ? links // slice makes a true copy + easier sort method
+      : links.slice().sort((l1, l2) => l2.votes.length - l1.votes.length);
     return (
       <List>
         {sortedLinks.map((link, index) => (
