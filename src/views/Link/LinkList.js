@@ -23,7 +23,10 @@ function LinkList(props) {
 
   const getLinks = React.useCallback(() => {
     // onSnapShot can call a callback if its passed as an arg
-    firebase.db.collection('links').onSnapshot(handleSnapshot);
+    firebase.db
+      .collection('links')
+      .orderBy('created', 'desc')
+      .onSnapshot(handleSnapshot);
   }, [firebase.db]);
 
   React.useEffect(() => {
@@ -39,10 +42,23 @@ function LinkList(props) {
     setLinks(links);
   }
 
+  // if the route is top then sort it by votes
+  function sortByVotes(a, b) {
+    if (a.votes.length > b.votes.length) {
+      return -1;
+    } else if (b.votes.length > a.votes.length) {
+      return 1;
+    }
+    return 0;
+  }
+
   function renderLinks(links) {
+    // check if the path is the new route vs top
+    const isNew = props.location.pathname.includes('new');
+    const sortedLinks = isNew ? links : [...links].sort(sortByVotes);
     return (
       <List>
-        {links.map((link, index) => (
+        {sortedLinks.map((link, index) => (
           <LinkItem key={link.id} {...link} count={index + 1} />
         ))}
       </List>
